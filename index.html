@@ -1,0 +1,98 @@
+<html>
+  <head>
+    <title>SEAN</title>
+  </head>
+  <body>
+    <div class="sean one"></div>
+    <button id="more" class="seanyboy">MORE</button>
+
+    <style type="text/css">
+      html, body {
+        min-width: 100%;
+        min-height: 100%;
+        overflow: hidden;
+        background-color: #111;
+      }
+
+      .sean {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-image: url("./sean.png");
+        background-repeat: repeat;
+      }
+
+      .seany {
+        position: absolute;
+        height: 19px;
+        width: 49px;
+        background-image: url("./sean.png");
+        background-repeat: none;
+        animation: drop 4s linear infinite;
+      }
+
+      button.seanyboy {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        z-index: 6969;
+      }
+
+      @keyframes swim-left {
+        0% { left: 0; }
+        100% { left: -49px; }
+      }
+
+      @keyframes drop {
+        0% { top: -19px }
+        100% { top: 110% }
+      }
+
+      .sean.one {
+        filter: grayscale(1) brightness(0.3);
+        animation: swim-left 0.5s linear infinite;
+      }
+
+    </style>
+
+    <script type="text/javascript">
+      var dropletsOnTheScreen = 25;
+      var dropletLifetimeMs = 4000;
+      var dropletCreatedEveryMs = dropletLifetimeMs / dropletsOnTheScreen;
+      var seanHandle = null;
+      var moreButton = document.getElementById('more');
+
+      function makeSeans(droplets, lifetime) {
+        return setInterval(function () {
+          var droplet = document.createElement('div');
+          droplet.classList.add('seany');
+
+          var horizontalOffset = Math.floor(Math.random() * document.body.clientWidth);
+          var verticalOffset = -Math.floor(Math.random() * (document.body.clientHeight / 10));
+          droplet.style.marginLeft = horizontalOffset + 'px';
+          droplet.style.paddingTop = verticalOffset + 'px';
+
+          document.body.appendChild(droplet);
+          setTimeout(function () {
+            document.body.removeChild(droplet);
+          }, lifetime);
+        }, lifetime / droplets);
+      }
+
+      function updateSeans(droplets, lifetime) {
+        clearInterval(seanHandle);
+        seanHandle = makeSeans(droplets, lifetime);
+        moreButton.innerText = 'Seans: ' + droplets;
+      }
+
+      updateSeans(dropletsOnTheScreen, dropletLifetimeMs);
+
+      moreButton.addEventListener('click', function () {
+        dropletsOnTheScreen += 5;
+        updateSeans(dropletsOnTheScreen, dropletLifetimeMs);
+      });
+    </script>
+  </body>
+</html>
